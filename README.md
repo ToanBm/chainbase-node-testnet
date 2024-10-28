@@ -1,11 +1,85 @@
 ![Screenshot_1](https://github.com/user-attachments/assets/dd2a775b-29d0-4f60-a90b-083dd4381e29)
+# Upgrade node
+### Stop & delete old version `chainbase-avs-setup` directory on your server
+```console
+cd $HOME/chainbase-avs-setup/holesky
+./chainbase-avs.sh stop
+```
+```console
+cd $HOME
+rm -rf chainbase-avs-setup
+```
+### Check your encrypted `ECDSA` and `BLS` keys
+```console
+eigenlayer keys list
+```
+- You also can import existing ECDSA and BLS keys from YOUR PRIVATEKEY using the CLI
+```console
+echo "password" | eigenlayer operator keys import --key-type ecdsa [keyname] [privatekey]
+```
+```console
+echo "password" | eigenlayer operator keys import --key-type bls [keyname] [privatekey]
+```
+### Clone new Chainbase AVS repo
+```console
+git clone https://github.com/chainbase-labs/chainbase-avs-setup && cd chainbase-avs-setup/holesky
+```
+### Set up the environment file
+```console
+cp .env.example .env
+```
+```console
+nano /root/chainbase-avs-setup/holesky/.env
+```
+```console
+NODE_ECDSA_KEY_FILE_PATH=/root/.eigenlayer/operator_keys/opr.ecdsa.key.json
+NODE_BLS_KEY_FILE_PATH=/root/.eigenlayer/operator_keys/opr.bls.key.json
+OPERATOR_ECDSA_KEY_PASSWORD=<your-password>
+OPERATOR_BLS_KEY_PASSWORD=<your-password>
+OPERATOR_ADDRESS=<your-por-wallet>
+NODE_SOCKET=<your-IP>:8011
+OPERATOR_NAME=<your-name>
+```
+```console
+chmod +x ./chainbase-avs.sh
+```
+### Operating the Chainbase AVS
+```console
+./chainbase-avs.sh register
+```
+### Run Node
+```console
+./chainbase-avs.sh run
+```
+### Test Node
+```console
+./chainbase-avs.sh test
+```
+### Check Logs
+```console
+cd ~/chainbase-avs-setup/holesky
+docker compose logs -f
+```
+```console
+docker logs manuscript_node -f
+```
+### Monitor dashboard
+You can visit http://YOUR_IP_ADDRESS:3010 on browser to view the dashboard to confirm the status of your node. If you are unable to access the page in your browser, please verify that port 3010 on your server is open and properly configured in firewall settings.
+### Update Node socket
+```console
+./chainbase-avs.sh socket
+```
+### Update Node version
+```console
+./chainbase-avs.sh stop
+./chainbase-avs.sh update
+./chainbase-avs.sh run
+```
+## ..........Done!............................................................
 
 # How to Setup an AVS Operator
-
 ## System Requirement
 ![Screenshot_1](https://github.com/user-attachments/assets/91ebbc59-8134-4118-8162-8e9ae827344f)
-
-
 ## 1. Install Dependecies
 ```console
 # Update & Install Packages
